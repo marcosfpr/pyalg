@@ -4,6 +4,15 @@ class Node:
         self.left = None
         self.right = None
 
+    def height(self):
+        if self.left is None and self.right is None:
+            return 0
+
+        left = self.left.height() if self.left else 0
+        right = self.right.height() if self.right else 0
+
+        return max(left, right) + 1
+
 
 class BST:
     def __init__(self):
@@ -26,6 +35,9 @@ class BST:
                 node.left = Node(value)
             else:
                 self._insert(node.left, value)
+
+    def height(self):
+        return self.root.height()
 
     def search(self, value):
         return self._search(self.root, value)
@@ -51,31 +63,43 @@ class BST:
             elements.append(node.value)
             self._inorder(node.right, elements)
 
+    def postorder(self):
+        elements = []
+        self._postorder(self.root, elements)
+        return elements
+
+    def _postorder(self, node, elements):
+        if node is not None:
+            self._postorder(node.left, elements)
+            self._postorder(node.right, elements)
+            elements.append(node.value)
+
+    def preorder(self):
+        elements = []
+        self._preorder(self.root, elements)
+        return elements
+
+    def _preorder(self, node, elements):
+        if node is not None:
+            elements.append(node.value)
+            self._preorder(node.left, elements)
+            self._preorder(node.right, elements)
+
 
 if __name__ == "__main__":
+    import random
+    from copy import copy
+
+    arr = [1, 2, 4, 7, 10, 15, 20, 47, 50, 92, 101]
+
+    random.shuffle(arr)
+
     tree = BST()
+    for elem in arr:
+        tree.insert(elem)
 
-    tree.insert(2)
-    tree.insert(4)
-    tree.insert(1)
-    tree.insert(9)
-    tree.insert(8)
-    tree.insert(7)
-    tree.insert(3)
-    tree.insert(5)
-    tree.insert(6)
+    print(f"In-order: {tree.inorder()}")
+    print(f"Post-order: {tree.postorder()}")
+    print(f"Pre-order: {tree.preorder()}")
 
-    print(tree.inorder())
-
-    print(tree.search(1))
-    print(tree.search(2))
-    print(tree.search(3))
-    print(tree.search(4))
-    print(tree.search(5))
-    print(tree.search(6))
-    print(tree.search(7))
-    print(tree.search(8))
-    print(tree.search(9))
-
-    print(tree.search(10))
-    print(tree.search(11))
+    print(f"Tree height: {tree.height()}")
