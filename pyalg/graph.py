@@ -2,10 +2,25 @@ import random
 from dataclasses import dataclass
 from typing import List
 
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+
 
 @dataclass
 class Graph:
     adjacency_matrix: List[List[int]]
+
+    def to_numpy(self):
+        return np.array(self.adjacency_matrix)
+
+    def plot(self):
+        graph = nx.from_numpy_array(self.to_numpy())
+        pos = nx.spring_layout(graph)
+        nx.draw(graph, pos=pos, with_labels=True)
+        labels = nx.get_edge_attributes(graph, "weight")
+        nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=labels)
+        plt.show()
 
     @staticmethod
     def zeros(n) -> "Graph":

@@ -1,1 +1,3 @@
 *.png
+pyalg/__pycache__/**
+.vector_cache
